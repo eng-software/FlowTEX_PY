@@ -124,10 +124,11 @@ class TexNet:
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
         self.ser.write(reqFrame)
+        self.mstate = self.waitSTX
 
         #Will poll the serial until get error, a response frame or timeout
         while((self.rxTimer.getElapsed() < 2)and(self.newFrame == False)and(self.error == False)):
-            while((self.ser.in_waiting > 0)and(self.newFrame == False)and(self.error == False)):
+            if(self.ser.in_waiting > 0):
                 value = self.ser.read(1)
                 self.processData(value)
 
